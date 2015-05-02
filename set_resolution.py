@@ -4,12 +4,12 @@ import os
 import time
 
 #--set the default resolution below (mind the quotes)
-default = "1680x1050"
+default = "3200x1800"
 #---
 
 # read the datafile
 curr_dir = os.path.dirname(os.path.abspath(__file__))
-datafile = curr_dir+"/procsdata.txt"
+datafile = curr_dir+"/set_resolution.conf"
 procs_data = [l.split() for l in open(datafile).read().splitlines() if not l == "\n"]
 procs = [pdata[0] for pdata in procs_data]
 
