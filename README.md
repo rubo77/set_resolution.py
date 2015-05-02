@@ -41,6 +41,14 @@ When the application is closed, the resolution is automatically set back to `320
 
         python3 ./set_resolution.py
 
+###Figure out the descriptor for applications
+
+If you want to find out the name, you have to write into the config file, you can use this command:
+
+    sleep 5 && cat "/proc/$(xdotool getwindowpid "$(xdotool getwindowfocus)")/comm"
+
+Once you started this, you have 5 seconds to focus the desired app.
+
 ###Note
 The script use `pgrep -f <process>`, which catches all matches, including scripts. The possible downside is that it can cause name clashes when opening a file with the same name as the process.
 
