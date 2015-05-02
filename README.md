@@ -1,5 +1,7 @@
 # set_resolution.py
 
+*Written by Jacob Vlijm:* http://askubuntu.com/a/615754/34298
+
 A background script to automatically set the resolution *per application*, while you can set different resolutions for different (multiple) applications at once.
 
 It can handle different applications with a different (required) resolution, running at the same time. The background script will keep track of what is the front most application, and will set the resolution accordingly. It also works fine with <kbd>Alt</kbd>+<kbd>Tab</kbd>.
