@@ -56,5 +56,13 @@ while True:
             req = default
         current = get_res()
         if current != req:
+            if current == "3200x1800" and (req == "1920x1080" or req == "1600x900"):
+                print("1")
+                subprocess.call(['/usr/bin/gsettings', 'set', 'org.gnome.desktop.interface', 'scaling-factor', '1'])
+                subprocess.call(['/usr/bin/gsettings', 'set','com.ubuntu.user-interface','scale-factor', "{'HDMI1': 8, 'eDP1': 8}"])
+            elif (current == "1920x1080" or current == "1600x900") and req == "3200x1800":
+                print("back")
+                subprocess.call(['/usr/bin/gsettings', 'set', 'org.gnome.desktop.interface', 'scaling-factor', '2'])
+                subprocess.call(['/usr/bin/gsettings', 'set','com.ubuntu.user-interface','scale-factor', "{'HDMI1': 8, 'eDP1': 16}"])
             subprocess.call(["xrandr", "-s", req])
     frontmost1 = frontmost2
