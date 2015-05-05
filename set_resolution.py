@@ -5,7 +5,8 @@ import sys
 import time
 
 #--- set default resolution below
-resolution = "1680x1050"
+#resolution = "1680x1050"
+resolution = "3200x1800"
 #---
 
 curr_dir = os.path.dirname(os.path.abspath(__file__))
