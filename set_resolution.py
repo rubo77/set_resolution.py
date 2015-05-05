@@ -46,6 +46,7 @@ def front_pid():
 
 def matching():
     running = get_pids(); frontmost = check_frontmost()
+    matches=[]
     if all([frontmost != None, len(running) != 0]):
         matches = [item[0] for item in running if item[1] == frontmost[0].split()[2]]
     if len(matches) != 0:
