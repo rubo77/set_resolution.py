@@ -1,60 +1,67 @@
 #!/usr/bin/env python3
 import subprocess
 import os
+import sys
 import time
 
-#--set the default resolution below (mind the quotes)
-default = "3200x1800"
+#--- set default resolution below
+resolution = "1680x1050"
 #---
 
-# read the datafile
 curr_dir = os.path.dirname(os.path.abspath(__file__))
-datafile = curr_dir+"/set_resolution.conf"
-procs_data = [l.split() for l in open(datafile).read().splitlines() if not l == "\n"]
-procs = [pdata[0] for pdata in procs_data]
+datafile = curr_dir+"/procsdata.txt"
+applist = [l.split() for l in open(datafile).read().splitlines()]
+print(applist)
+apps = [item[0] for item in applist]
 
-def get(command):
-    return subprocess.check_output(["/bin/bash", "-c", command]).decode("utf-8")
-
-def check_active():
-    matches = []
-    for p in procs:
-        try:
-            matches.append([p, get("pgrep -f "+p).strip()])
-        except subprocess.CalledProcessError:
-            pass
-    return matches
-
-def get_res():
-    xr = get("xrandr").split()
-    pos = xr.index("current")
-    return ("x").join([xr[pos+1], xr[pos+3].replace(",", "")])
-
-def get_frontmost():
+def get(cmd):
     try:
-        fm = str(hex(int(get("xdotool getwindowfocus"))))
-        return fm[:2]+"0"+fm[2:]
+        return subprocess.check_output(["/bin/bash", "-c", cmd]).decode("utf-8")
     except subprocess.CalledProcessError:
         pass
 
-def get_pidlist():
-    return [l.split()[:3] for l in get("wmctrl -lp").splitlines()]
+def get_pids():
+    # returns pids of listed applications; seems ok
+    runs = []
+    for item in apps:
+        pid = get("pgrep -f "+item)
+        if pid != None:
+            runs.append((item, pid.strip()))    
+    return runs
 
-frontmost1 = get_frontmost()
+def check_frontmost():
+    # returns data on the frontmost window; seems ok
+    frontmost = str(hex(int(get("xdotool getwindowfocus").strip())))
+    frontmost = frontmost[:2]+"0"+frontmost[2:]
+    try:
+        wlist = get("wmctrl -lpG").splitlines()
+        return [l for l in wlist if frontmost in l]
+    except subprocess.CalledProcessError:
+        pass
+
+def front_pid():
+    # returns the frontmost pid, seems ok
+    return check_frontmost()[0].split()[2]
+
+def matching():
+    running = get_pids(); frontmost = check_frontmost()
+    if all([frontmost != None, len(running) != 0]):
+        matches = [item[0] for item in running if item[1] == frontmost[0].split()[2]]
+    if len(matches) != 0:
+        return matches[0]
+    else:
+        pass
+
+trigger1 = matching()
+    
 while True:
-    time.sleep(2)
-    frontmost2 = get_frontmost()
-    if all([frontmost2 != frontmost1, frontmost2 != None]):
-        pids = get_pidlist(); relevant = check_active()
-        frontmost_pid = [w[2] for w in pids if w[0] == frontmost2]
-        time.sleep(0.1)
-        frontmost_pid = frontmost_pid[0]
-        match = [m[0] for m in relevant if m[1] == frontmost_pid]
-        try:
-            req = [d[1] for d in procs_data if d[0] == match[0]][0]
-        except IndexError:
-            req = default
-        current = get_res()
-        if current != req:
-            subprocess.call(["xrandr", "-s", req])
-    frontmost1 = frontmost2
+    time.sleep(1)
+    trigger2 = matching()
+    if trigger2 != trigger1:
+        if trigger2 == None:
+            command = "xrandr -s "+resolution
+        else:
+            command = "xrandr -s "+[it[1] for it in applist if it[0] == trigger2][0]
+        subprocess.Popen(["/bin/bash", "-c", command])
+        print(command)
+    trigger1 = trigger2
