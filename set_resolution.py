@@ -5,14 +5,12 @@ import sys
 import time
 
 #--- set default resolution below
-#resolution = "1680x1050"
-resolution = "3200x1800"
+resolution = "1680x1050"
 #---
 
 curr_dir = os.path.dirname(os.path.abspath(__file__))
 datafile = curr_dir+"/procsdata.txt"
 applist = [l.split() for l in open(datafile).read().splitlines()]
-print(applist)
 apps = [item[0] for item in applist]
 
 def get(cmd):
@@ -45,12 +43,12 @@ def front_pid():
     return check_frontmost()[0].split()[2]
 
 def matching():
+    # nakijken
     running = get_pids(); frontmost = check_frontmost()
-    matches=[]
     if all([frontmost != None, len(running) != 0]):
         matches = [item[0] for item in running if item[1] == frontmost[0].split()[2]]
-    if len(matches) != 0:
-        return matches[0]
+        if len(matches) != 0:
+            return matches[0]
     else:
         pass
 
@@ -65,5 +63,6 @@ while True:
         else:
             command = "xrandr -s "+[it[1] for it in applist if it[0] == trigger2][0]
         subprocess.Popen(["/bin/bash", "-c", command])
-        print(command)
+        print(trigger2, command)
     trigger1 = trigger2
+
