@@ -1,2 +1,2 @@
-java 1920x1080
-gedit 1920x1080
+java 1920x1080 1
+gedit 1920x1080 1
