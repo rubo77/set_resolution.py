@@ -4,7 +4,7 @@ import os
 import sys
 import time
 
-#--- set default resolution below
+#--- set default settings below
 defaultResolution = "3200x1800"
 defaultScalingFactor = 2
 #---

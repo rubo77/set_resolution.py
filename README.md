@@ -28,15 +28,26 @@ When the application is closed, the resolution is automatically set back to `320
 
 ###How to use
 1. Copy the script below into an empty file, save it as `set_resolution.py`
-2. In the head of the script, set your default resolution, in the line:
+2. In the head of the script, set your default resolution and scaling factor:
 
-        #--- set the default resolution below
+        #--- set default settings below
         default = "3200x1800"
+        defaultScalingFactor = 2
         #---
 
-3. In *the very same directory* (folder), create a textfile, *exactly* named: `set_resolution.conf`. In this textfile, set the desired application or process, followed by a space, followed by the desired resolution. One application or script per line, looking like:
+3. In *the very same directory* (folder), create a textfile, *exactly* named: `procsdata.txt`. Define one application or script per line:
 
- ![enter image description here][4]
+    * the desired application or process
+    * followed by a space
+    * followed by the desired resolution
+    * followed by a space
+    * followed by the desired scaling factor. .
+    
+    Example: 
+
+        java 1920x1080 1
+        gedit 1920x1080 1
+
 4. Run the script by the command:
 
         python3 ./set_resolution.py
@@ -76,4 +87,3 @@ When `pgrep -f <process>` does not produce output for any of the listed applicat
   [1]: http://i.stack.imgur.com/sFVis.png
   [2]: http://i.stack.imgur.com/WKCCH.png
   [3]: http://i.stack.imgur.com/eM6Wh.png
-  [4]: http://i.stack.imgur.com/ppvfe.png
